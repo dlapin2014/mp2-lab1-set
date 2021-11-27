@@ -309,3 +309,50 @@ TEST(TBitField, bitfields_with_different_bits_are_not_equal)
 
   EXPECT_NE(bf1, bf2);
 }
+
+
+
+
+TEST(TBitField, cin_operator_work_correct)
+{
+    const int size1 = 4;
+    TBitField bf1(size1), bf2(size1);
+    string temp = "1010\n";
+    stringstream in(temp);
+    
+    in >> bf1;
+
+
+
+    // bf2 = 1010;
+    bf2.SetBit(0);
+    bf2.SetBit(2);
+
+
+
+    EXPECT_EQ(bf2, bf1);
+}
+
+
+
+TEST(TBitField, cout_operator_work_correct)
+{
+    const int size1 = 4;
+    TBitField bf1(size1);
+    bf1.SetBit(0);
+    bf1.SetBit(2);
+    stringstream in;
+    in << bf1;
+    string temp = in.str();
+
+
+    EXPECT_EQ(temp, "1010");
+}
+
+
+
+
+
+
+
+

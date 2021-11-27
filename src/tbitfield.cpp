@@ -14,12 +14,9 @@
 
 #include "tbitfield.h"
 
-
-
 TBitField::TBitField(int len)
 {
 	if (len < 0) throw invalid_argument("negative bitfield length");
-
 	BitLen = len;
 	MemLen = (len + 8 * sizeof(TELEM) - 1) / (8 * sizeof(TELEM));
 	//cout << "||||" << MemLen <<" "  << BitLen<< "|||||||";
@@ -45,11 +42,13 @@ TBitField::~TBitField()
 
 int TBitField::GetMemIndex(const int n) const // индекс Мем для бита n
 {
+
 	return n / (8 * sizeof(TELEM));
 }
 
 TELEM TBitField::GetMemMask(const int n) const // битовая маска для бита n
 {
+
 	return 1u << (n % (8 * sizeof(TELEM)));
 }
 
@@ -62,26 +61,19 @@ int TBitField::GetLength(void) const // получить длину (к-во б�
 
 void TBitField::SetBit(const int n) // установить бит
 {
-	if (n < 0) throw invalid_argument("negative bit index");
-	if (n >=BitLen) throw invalid_argument("too large bit index");
-
-
+	if (n < 0 || n >= BitLen) throw invalid_argument("invalid index of bit");
 	pMem[GetMemIndex(n)] = pMem[GetMemIndex(n)] | GetMemMask(n);
 }
 
 void TBitField::ClrBit(const int n) // очистить бит
 {
-
-	if (n < 0) throw invalid_argument("negative bit index");
-	if (n >= BitLen) throw invalid_argument("too large bit index");
-
+	if (n < 0 || n >= BitLen) throw invalid_argument("invalid index of bit");
 	pMem[GetMemIndex(n)] = pMem[GetMemIndex(n)] & (~GetMemMask(n));
 }
 
 int TBitField::GetBit(const int n) const // получить значение бита
 {
-	if (n < 0) throw invalid_argument("negative bit index");
-	if (n >= BitLen) throw invalid_argument("too large bit index");
+	if (n < 0 || n >= BitLen) throw invalid_argument("invalid index of bit");
 	return (pMem[GetMemIndex(n)] >> (n % (8 * sizeof(TELEM)))) & 1u;
 }
 
@@ -229,20 +221,28 @@ istream& operator>>(istream& istr, TBitField& bf) // ввод
 
 ostream& operator<<(ostream& ostr, const TBitField& bf) // вывод
 {
+
+
+	string s = "";
+
 	for (int i = 0; i < bf.MemLen; i++) {
 		TELEM f = 1u;
 		for (int j = 0; j < 8 * sizeof(TELEM); j++) {
 			if (bf.pMem[i] & f) {
-				ostr << "1";
+				s.append("1");
 			}
 			else
-				ostr << "0";
+				s.append("0");
 			f = f << 1;
 		}
-
-		ostr << " ";
+		s.resize(bf.BitLen);
+		ostr << s;
 
 	}
 
+
+
+
 	return ostr;
 }
+

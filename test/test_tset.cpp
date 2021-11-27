@@ -295,3 +295,32 @@ TEST(TSet, check_negation_operator)
 
   EXPECT_EQ(expSet, set1);
 }
+
+
+TEST(TSet, throws_when_IsMember_index_incorrect)
+{
+	const int size = 4;
+	TSet set(size);
+
+
+	ASSERT_ANY_THROW(set.IsMember(5));
+}
+
+TEST(TSet, throws_when_InsElem_index_incorrect)
+{
+	const int size = 4;
+	TSet set(size);
+
+
+	ASSERT_ANY_THROW(set.InsElem(5));
+}
+
+
+TEST(TSet, throws_when_DelElem_index_incorrect)
+{
+	const int size = 4;
+	TSet set(size);
+
+
+	ASSERT_ANY_THROW(set.DelElem(5));
+}

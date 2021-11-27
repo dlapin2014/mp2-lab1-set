@@ -4,9 +4,7 @@
 //   Переработано для Microsoft Visual Studio 2008 Сысоевым А.В. (19.04.2015)
 //
 // Множество - реализация через битовые поля
-
 #include "tset.h"
-
 #include <sstream>
 
 TSet::TSet(int mp) :MaxPower(mp), BitField(mp)
@@ -20,9 +18,13 @@ TSet::TSet(const TSet& s) : MaxPower(s.MaxPower), BitField(s.BitField)
 }
 
 // конструктор преобразования типа
-TSet::TSet(const TBitField& bf) : MaxPower(bf.GetLength()), BitField(bf)
-{
-	
+
+/*: MaxPower(bf.GetLength()), BitField(bf)*/
+
+TSet::TSet(const TBitField& bf) : MaxPower(bf.GetLength()), BitField(MaxPower) {
+	BitField = bf;
+	MaxPower = bf.GetLength();
+
 }
 
 TSet::operator TBitField()
@@ -37,16 +39,19 @@ int TSet::GetMaxPower(void) const // получить макс. к-во эл-т�
 
 int TSet::IsMember(const int Elem) const // элемент множества?
 {
+	if (Elem < 0 || Elem >= MaxPower) throw invalid_argument("incorrect element");
 	return BitField.GetBit(Elem);
 }
 
 void TSet::InsElem(const int Elem) // включение элемента множества
 {
+	if (Elem < 0 || Elem >= MaxPower) throw invalid_argument("incorrect element");
 	BitField.SetBit(Elem);
 }
 
 void TSet::DelElem(const int Elem) // исключение элемента множества
 {
+	if (Elem < 0 || Elem >= MaxPower) throw invalid_argument("incorrect element");
 	BitField.ClrBit(Elem);
 }
 
@@ -90,6 +95,7 @@ TSet TSet::operator+(const TSet& s) // объединение
 
 TSet TSet::operator+(const int Elem) // объединение с элементом
 {
+	if (Elem < 0 || Elem >= MaxPower) throw invalid_argument("incorrect element");
 	TBitField temp(*this);
 	temp.SetBit(Elem);
 	return temp;
@@ -97,6 +103,7 @@ TSet TSet::operator+(const int Elem) // объединение с элемент
 
 TSet TSet::operator-(const int Elem) // разность с элементом
 {
+	if (Elem < 0 || Elem >= MaxPower) throw invalid_argument("incorrect element");
 	TBitField temp(*this);
 	temp.ClrBit(Elem);
 	return temp;
@@ -119,7 +126,7 @@ TSet TSet::operator~(void) // дополнение
 istream& operator>>(istream& istr, TSet& s) // ввод
 {
 	string t;
-	getline(istr, t).clear();
+	istr.clear();
 	getline(istr, t);
 
 	stringstream in(t);

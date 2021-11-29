@@ -21,9 +21,7 @@ TSet::TSet(const TSet& s) : MaxPower(s.MaxPower), BitField(s.BitField)
 
 /*: MaxPower(bf.GetLength()), BitField(bf)*/
 
-TSet::TSet(const TBitField& bf) : MaxPower(bf.GetLength()), BitField(MaxPower) {
-	BitField = bf;
-	MaxPower = bf.GetLength();
+TSet::TSet(const TBitField& bf) : MaxPower(bf.GetLength()), BitField(bf) {
 
 }
 
